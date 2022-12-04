@@ -1,28 +1,22 @@
 import sys
-
 M, N = map(int, sys.stdin.readline().split())
 
-prime_list = [2]
+def get_prime_list_under_number(max):
+    prime_list = [2]
+    if max == 1 or max == 2:
+        return prime_list
+    for i in range(3, max + 1):
+        is_prime = True
+        for j in prime_list:
+            if j > i ** 0.5:
+                break
+            if i % j == 0:
+                is_prime = False
+                break
+        if is_prime:
+            prime_list.append(i)
+    return prime_list
 
-def set_prime_list_under_number(max):
-    for n in range(3, max):
-        for i in prime_list:
-            if n % i == 0:
-                pass
-        prime_list.append(n)
-        return True
-def is_prime(n):
-    if n == 1:
-        return False
-    elif n == 2:
-        return True
-    else:
-        for i in prime_list:
-            if n % i == 0:
-                return False
-        if n < 1000:
-            prime_list.append(n)
-        return True
-for i in range(M , N + 1):
-    if is_prime(i):
+for i in get_prime_list_under_number(N):
+    if i >= M:
         print(i)
