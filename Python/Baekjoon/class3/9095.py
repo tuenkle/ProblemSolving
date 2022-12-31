@@ -1,17 +1,26 @@
 import sys
 T = int(sys.stdin.readline())
-hashmap = {1:1, 2:2, 3:3}
+global count
+global hashmap
+hashmap = {}
+def myfunc(number):
+    if number == 0:
+        global count
+        count += 1
+        return
+    if number in hashmap:
+        # global count
+        count += hashmap[number]
+        return
+    if number >= 1:
+        myfunc(number - 1)
+    if number >= 2:
+        myfunc(number - 2)
+    if number >= 3:
+        myfunc(number - 3)
 for _ in range(T):
+    count = 0
     n = int(sys.stdin.readline())
-    combination = []
-    while n > 0:
-        if n >= 3:
-            n -= 3
-            combination.append(3)
-        elif n == 2:
-            n -= 2
-            combination.append(2)
-        elif n == 1:
-            n -= 1
-            combination.append(1)
-    if 2 in combination:
+    myfunc(n)
+    hashmap[n] = count
+    print(count)
