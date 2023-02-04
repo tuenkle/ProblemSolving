@@ -2,8 +2,12 @@ import sys
 input = sys.stdin.readline
 N, M = map(int, input().split())
 mylist = []
+node_set = set([i + 1 for i in range(N)])
+
 for _ in range(M):
     u, v = map(int, input().split())
+    node_set.discard(u)
+    node_set.discard(v)
     need_append = True
     for i in mylist:
         if u in i:
@@ -32,4 +36,4 @@ while not nothing_changed:
             break
     else:
         nothing_changed = True
-print(len(mylist))
+print(len(mylist) + len(node_set))
