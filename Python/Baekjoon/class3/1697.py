@@ -1,59 +1,36 @@
 import sys
-sys.setrecursionlimit(10 ** 8)
+from collections import deque
 import time
 
-N, K = map(int, sys.stdin.readline().split())
-array = [1000000] * (K + 1)
-def myfunc(n, count):
-    if n < 0 or n > 100000:
-        return
-    if K == n:
-        if array[K] > count:
-            array[K] = count
-        else:
-            return
-    elif K < n:
-        if array[K] > count + n - K:
-            array[K] = count + n - K
-        else:
-            return
-    else:
-        if (n - 1) > 0 and (n - 1) < 100000:
-            myfunc(n - 1, count + 1)
-        if (n + 1) > 0 and (n + 1) < 100000:
-            myfunc(n + 1, count + 1)
-        if n * 2 > 0 and n * 2 < 100000:
-            myfunc(n * 2, count + 1)
-start = time.time()
-myfunc(N, 0)
-print(array[K])
-end = time.time()
-print(f"{end-start:.4f}")
-# if array[K] >= 0:
-#     if array[K] <= count:
-#         return
-# if array[n] >= 0:
-#     if array[n] <= count:
-#         return
-# array[n] = count
-# if n == K:
-#     for i in range(n, 100001):
-#         array[i] = count + i
-#     return
-# if K < n:
-#     if array[K] >= 0:
-#         if array[K] > count + n - K:
-#             for i in range(K, 100001):
-#                 array[i] = count + n - K + i
-#             return
-#     else:
-#         for i in range(K, 100001):
-#             array[i] = count + n - K + i
-#         return
-# else:
-#     if array[n - 1] < 0 or array[n - 1] > count + 1:
-#         myfunc(n - 1, count + 1)
-#     if array[n + 1] < 0 or array[n + 1] > count + 1:
-#         myfunc(n + 1, count + 1)
-#     if array[n + 1] < 0 or array[n + 1] > count + 1:
-#         myfunc(n * 2, count + 1)
+input = sys.stdin.readline
+N, K = map(int, input().split())
+start_time = time.time()
+queue = deque([[N, 0]])
+checklist = [False for i in range(100001)]
+if N == K:
+    print(0)
+else:
+    while True:
+        current = queue.popleft()
+        if current[0] * 2 == K:
+            print(current[1] + 1)
+            break
+        elif 0 <= current[0] * 2 and current[0] * 2 <= 100000:
+            if not checklist[current[0] * 2]:
+                checklist[current[0] * 2] = True
+                queue.append([current[0] * 2, current[1] + 1])
+        if current[0] + 1 == K:
+            print(current[1] + 1)
+            break
+        elif 0 <= current[0] + 1 and current[0] + 1 <= 100000:
+            if not checklist[current[0] + 1]:
+                checklist[current[0] + 1] = True
+                queue.append([current[0] + 1, current[1] + 1])
+
+        if current[0] - 1 == K:
+            print(current[1] + 1)
+            break
+        elif 0 <= current[0] - 1 and current[0] - 1 <= 100000:
+            if not checklist[current[0] - 1]:
+                checklist[current[0] - 1] = True
+                queue.append([current[0] - 1, current[1] + 1])
